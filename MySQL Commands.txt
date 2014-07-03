@@ -1,0 +1,129 @@
+##### MySQL Commands #####
+Comments: enclosed by /* */, EOL by #
+
+mysql -u root -p # Start
+mysql -u root -p DATBASENAME < path/script.sql # Batch mode
+
+-- Dump selected databases with --databases option
+mysqldump -u username -p --databases database1Name [database2Name ...] > backupFile.sql
+
+-- Dump all the tables of a particular database
+mysqldump -u username -p databaseName > backupFile.sql
+
+-- Dump selected tables of a particular database
+mysqldump -u username -p databaseName table1Name [table2Name ...] > backupFile.sql
+
+show databases; 
+
+use databasename;
+select database(); #Display current default database
+show tables; #Shows tables in current database
+describe TABLENAME; 
+
+Get number of rows: select count(*) from TABLENAME;
+
+# Creating/loading tables & databases
+create database if not exists DATABASENAME
+create table if not exists TABLENAME (col1name col1type col1attribute, primarykey(col1name);
+load data local infile 'path' into table TABLENAME columns terminated by ',' lines terminated by '\r';
+mysqlimport -u root -p --local DATABASENAME path_to_database.csv
+
+# Write into textfile
+select * from DATABASENAME into outfile 'path/name.csv' columns terminated by ',' lines terminated by '\r';
+
+# Modifying tables & data
+insert into TABLENAME values (val1, val2, ..., valX), (bval1, bval2, ..., bvalY); #Insert two rows of values
+update TABLENAME set COLUMNNAME = value|null|default, where CRITERIA
+delete from TABLENAME where CRITERIA
+alter table TABLENAME add column COLUMN_NAME int unsigned default_value
+alter table TABLENAME add foreign key (columnname_table1) references OTHERTABLE (columnname_table2)
+
+### SELECTIONS ###
+select * from TABLENAME;
+select column1name, column2name from TABLENAME;
+select 1+1, now();
+select column1name, column2name from TABLENAME where CRITERIA;
+select * from TABLENAME where CRITERIA and/or/xor CRITERIA;
+select * from TABLENAME where COLUMNNAME in ('name1', 'name2');
+select * from TABLENAME where (COLUMNNAME between X and Y);
+select * from products where COLUMNNAME is null;
+SELECT ... FROM tableName WHERE criteria ORDER BY columnA ASC|DESC, columnB ASC|DESC;
+
+# Summary functions:
+select max(column1name) from TABLENAME;
+	--> Also min(), avg(), std(), sum(), cast()
+select CATEGORICAL_COLUMN, avg(NUMERICAL_COLUMN) as 'Mean', count(*) from TABLENAME group by CATEGORICAL_COLUMN
+select CATEGORICAL_COL, NUMERICAL_COL from TABLENAME group by CATEGORICAL_COL having NUMERICAL_COL >= CRITERIA
+	
+with rollup --> apply aggregate functions to all groups and print in final row
+	
+# Concatenating Rows:
+select concat(column1, 'delimeter', column1) from TABLENAME;
+
+# Aliases: Displays Title as the given alias
+select column1name as `Column One Name` from TABLENAME ;
+
+# Selecting from two tables
+select TABLE1.COLNAME, TABLE2.COLNAME from DATABASE join on TABLE1.KEY = TABLE2.KEY where CRITERIA
+
+select columnname from TABLENAME where (name like STRINGCRITERIA);
+String criteria:
+	'abc%' --> string beginning with 'abc'
+	'%xyz' --> string ends with 'xyz'
+	'%aaa%' --> string contains aaa
+	'___' --> string exactly three characters
+	'a_b%' --> string begins with a, one blank, then b, then anything
+
+#- Building indices:
+Indexes built can be built upon:
+1.	a single column
+2.	a set of columns
+3.	a unique-value column 
+4.	a prefix of a column (strings)
+
+create table TABLENAME ..... [unique] index INDEXNAME(col1name)
+create table TABLENAME ..... PRIMARY KEY (col1name, ...) #Build index automatically
+create [unique] index INDEXNAME on TABLENAME (col1name, ...);
+alter table TABLENAME add [unique]|index|primary key INDEXNAME (col1name)
+
+show index from TABLENAME
+
+INT UNSIGNED --> Non-negative integers
+CHAR(3) --> Fixed-length string of 3 characters
+VARCHARD(30) --> Variable length string up to 30 characters
+DECIMAL(10, 2) --> Two decimal places
+?FLOAT()
+?DOUBLE()
+
+CREATE TABLE IF NOT EXISTS products (
+         productID    INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+         productCode  CHAR(3)       NOT NULL DEFAULT '',
+         name         VARCHAR(30)   NOT NULL DEFAULT '',
+         quantity     INT UNSIGNED  NOT NULL DEFAULT 0,
+         price        DECIMAL(7,2)  NOT NULL DEFAULT 99999.99,
+         PRIMARY KEY  (productID)
+       );
+	   
+CREATE TABLE products_suppliers (
+         productID   INT UNSIGNED  NOT NULL,
+         supplierID  INT UNSIGNED  NOT NULL,
+                     -- Same data types as the parent tables
+         PRIMARY KEY (productID, supplierID),
+                     -- uniqueness
+         FOREIGN KEY (productID)  REFERENCES products  (productID),
+         FOREIGN KEY (supplierID) REFERENCES suppliers (supplierID)
+       );
+	   
+use mysql;
+update user set password=PASSWORD("pass") where User='root';
+flush privileges;
+quit;
+
+help;
+\c; # clears current input
+
+SELECT table_name, column_name, data_type, data_length
+FROM USER_TAB_COLUMNS
+WHERE table_name = 'MYTABLE'
+
+	   

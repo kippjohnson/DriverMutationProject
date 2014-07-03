@@ -1,0 +1,35 @@
+##### Minerva Information #####
+ssh johnsk26+vkrb@minerva.hpc.mssm.edu
+
+mybalance #prints balance (in seconds)
+mybalance -h
+find /sc/orga/scratch/$USER -atime +30 #Prints which files will be purged
+
+Round-robin:
+minerva.hpc.mssm.edu
+On-campus
+minerva3.hpc.mssm.edu
+minerva4.hpc.mssm.edu
+Public:
+minerva2.hpc.mssm.edu
+minerva.hpc.mssm.edu 
+
+Home directory: /hpc/users/johnsk26 #Backed up, 10GB, not fast
+Project directory: /sc/orga/projects/chenr02a #Not backed up
+My scratch directory: /sc/orga/scratch/johnsk26 #Purged after 30 days
+My work directory: /sc/orga/work/$USER #Not purged after 30 days, not backed up, 100GB limit
+
+##### Mailing Address: #####
+Icahn Institute for Genomic Sciences
+Icahn School of Medicine
+1255 Fifth Avenue, Suite C2
+New York, New York 10029
+Main # 212-824-9651
+
+##### Database Information #####
+db2.hpc.mssm.edu
+db2.mgmt.hpc.mssm.edu
+
+Install script: http://www.macminivault.com/mysql-mavericks/
+
+
